@@ -1,0 +1,123 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2707
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red15\green112\blue1;\red255\green255\blue255;\red0\green0\blue0;
+\red19\green118\blue70;\red144\green1\blue18;}
+{\*\expandedcolortbl;;\cssrgb\c0\c50196\c0;\cssrgb\c100000\c100000\c100000;\cssrgb\c0\c0\c0;
+\cssrgb\c3529\c52549\c34510;\cssrgb\c63922\c8235\c8235;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\qc\partightenfactor0
+
+\f0\fs24 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 ########################\cf0 \cb1 \strokec4 \
+\cf2 \cb3 \strokec2 ### model parameters ###\cf0 \cb1 \strokec4 \
+\cf2 \cb3 \strokec2 ########################\cf0 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 #1. CV2 Image Preprocessing\cf0 \cb1 \strokec4 \
+\
+\cf2 \cb3 \strokec2 #1a: Image Resizer\cf0 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb3 \strokec4 cv2.resize(\cb1 \strokec4 \
+\cb3 \strokec4         dsize = (\cf5 \strokec5 32\cf0 \strokec4 ,\cf5 \strokec5 32\cf0 \strokec4 ),\cb1 \strokec4 \
+\cb3 \strokec4         interpolation=cv2.INTER_CUBIC)\cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 #1b: Cropping Image\cf0 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb3 \strokec4 img[y=\cf5 \strokec5 2\cf0 \strokec4 :h=\cf5 \strokec5 30\cf0 \strokec4 , x=\cf5 \strokec5 2\cf0 \strokec4 :w=\cf5 \strokec5 30\cf0 \strokec4 ]\cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 #i.e. this is cropping out 2 pixels from each side, keeping the middle 28x28 pixels out of 32x32\cf0 \cb1 \strokec4 \
+\
+\cf2 \cb3 \strokec2 #1c: Blending With A Second Image\cf0 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb3 \strokec4 cv2.addWeighted(\cb1 \strokec4 \
+\cb3 \strokec4             data1=img,\cb1 \strokec4 \
+\cb3 \strokec4             alpha=\cf5 \strokec5 1.5\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4             data2=np.zeros(img.shape, img.dtype),\cb1 \strokec4 \
+\cb3 \strokec4             beta=\cf5 \strokec5 .5\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4             gamma=\cf5 \strokec5 0\cf0 \strokec4 )\cb1 \strokec4 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 #1d: Inverting Colors\cf0 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb3 \strokec4 cv2.bitwise_not(img)\cb1 \strokec4 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 #1e: Converting To Grayscale\cf0 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb3 \strokec4 img/\cf5 \strokec5 255\cf0 \strokec4    \cb1 \strokec4 \
+\
+\
+\
+\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 #2. Sequential() Neural Network Classifier Model\cf0 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb3 \strokec4 model = Sequential()\cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 #2a: Convolution Layer\cf0 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb3 \strokec4 model.add(Conv2D(\cb1 \strokec4 \
+\cb3 \strokec4               filters=\cf5 \strokec5 32\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4               kernel_size=(\cf5 \strokec5 3\cf0 \strokec4 , \cf5 \strokec5 3\cf0 \strokec4 ),\cb1 \strokec4 \
+\cb3 \strokec4               padding = \cf6 \cb3 \strokec6 'same'\cf0 \cb3 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4               activation = \cf6 \cb3 \strokec6 'relu'\cf0 \cb3 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4               kernel_initializer=\cf6 \cb3 \strokec6 'he_uniform'\cf0 \cb3 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4               input_shape=(\cf5 \strokec5 28\cf0 \strokec4 , \cf5 \strokec5 28\cf0 \strokec4 , \cf5 \strokec5 3\cf0 \strokec4 )))\cb1 \strokec4 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 #2c: Input Window Size For Taking Maximum Value In Downsampling\cf0 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb3 \strokec4 model.add(MaxPooling2D((\cf5 \strokec5 2\cf0 \strokec4 , \cf5 \strokec5 2\cf0 \strokec4 )))\cb1 \strokec4 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 #2d: Flatten The Image\cf0 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb3 \strokec4 model.add(Flatten()) \cf2 \strokec2 #no params specified\cf0 \cb1 \strokec4 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 #2e: Densely-Connected Neural Network Layers\cf0 \cb1 \strokec4 \
+\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb3 \strokec4 model.add(Dense(\cb1 \strokec4 \
+\cb3 \strokec4              units=\cf5 \strokec5 128\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4              activation=\cf6 \cb3 \strokec6 'relu'\cf0 \cb3 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4              kernel_initializer=\cf6 \cb3 \strokec6 'he_uniform'\cf0 \cb3 \strokec4 ))\cb1 \strokec4 \
+\
+\cb3 \strokec4 model.add(Dense(\cb1 \strokec4 \
+\cb3 \strokec4              units=\cf5 \strokec5 1\cf0 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4              activation=\cf6 \cb3 \strokec6 'sigmoid'\cf0 \cb3 \strokec4 ))\cb1 \strokec4 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 #2f: Model Compilation\cf0 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb3 \strokec4 model.compile(\cb1 \strokec4 \
+\cb3 \strokec4             optimizer=SGD(lr=\cf5 \strokec5 .001\cf0 \strokec4 , momentum=\cf5 \strokec5 .9\cf0 \strokec4 ),\cb1 \strokec4 \
+\cb3 \strokec4             loss=\cf6 \cb3 \strokec6 'binary_crossentropy'\cf0 \cb3 \strokec4 ,\cb1 \strokec4 \
+\cb3 \strokec4             metrics=\cf6 \cb3 \strokec6 'accuracy'\cf0 \cb3 \strokec4 )\cb1 \strokec4 \
+\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 #2g: Model Fit\cf0 \cb1 \strokec4 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb3 \strokec4 model.fit(epochs = \cf5 \strokec5 15\cf0 \strokec4 )\cb1 \strokec4 \
+\
+\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \strokec2 #3. Decision Line for considering something a flip opportunity ("1" label): .5\cf0 \cb1 \strokec4 \
+\cf2 \cb3 \strokec2 #i.e. if predicted probability of it being a flip opportunity is >= .5 (standard rounding),\cf0 \cb1 \strokec4 \
+\cf2 \cb3 \strokec2 #consider it a flip opportunity\cf0 \cb1 \strokec4 \
+\
+}
